@@ -10,7 +10,8 @@
         
 <?php
         
-        $con = new PDO('mysql:host=localhost;dbname=wetterstation', 'root', '');
+        $config = parse_ini_file('config.ini', true);
+        $con = new PDO('mysql:host='.$config['host'].';dbname='.$config['database'], $config['username'], $config['password']);
 
         if (!$con) {
             exit("Verbindungsfehler ".mysqli_connect_error());
