@@ -18,9 +18,9 @@
         }
         echo("connected to database<br />");
 
-        $sql = "SELECT id, datum, temp FROM daten";
+        $sql = "SELECT id, datum, temp, humidity, co2 FROM daten";
         foreach ($con->query($sql) as $row) {
-            echo "<p>ID: ".$row['id']." Date: ".$row['datum']." Temp: ".$row['temp']."</p><br />";
+            echo "<p>ID: ".$row['id']." Date: ".$row['datum']." Temp: ".$row['temp']." Humidity: ".$row['humidity']." CO2: ".$row['co2']."</p><br />";
         }
 ?>
     </body>
