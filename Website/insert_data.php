@@ -7,29 +7,16 @@ if (isset($_GET["temp"]) && isset($_GET["humidity"]) && isset($_GET["co2"])) {
     $humidity = $_GET["humidity"];
     $co2 = $_GET["co2"];
 
-    // login data for database
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $database = "wetterstation";
-
-    // establish connection to database
-    $connection = new mysqli($servername, $username, $password, $database);
-
-    // check connection
-    if ($connection->connect_error) {
-      die("MySQL connection failed: " . $connection->connect_error);
-    }
+    include_once 'db_config.php';
 
     // insert data
     $sql = "INSERT INTO daten (temp, humidity, co2) VALUES ($temp, $humidity, $co2)";
 
-    if ($connection->query($sql) === TRUE) {
+    if ($db->query($sql) === TRUE) {
         echo "New record created successfully";
     } else {
         echo "Error: " . $sql . " => " . $connection->error;
     }
-    $connection->close();
 } else {
     echo "all values must be set in HTTP request";
 }
