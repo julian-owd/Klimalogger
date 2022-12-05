@@ -6,17 +6,19 @@
 // FATAL ERROR OCCURRED? - Wrong boot mode? --> Press boot button for ~2sec while it says "connecting....."
 
 #define DHTPIN 21
+#define CO2PIN 19
 #define DHTTYPE DHT22
 
-const char* ssid = "FrettBox"; // Name of Wifi
-const char* password = "42327947420018450426"; // Password of Wifi
-String HOST = "http://192.168.178.44:80/wetter/insert_data.php"; // IP des Geräts mit der Datenbank im lokalen Netzwerk
+const char* ssid = "JulianHotspot"; // Name of Wifi
+const char* password = "09022004"; // Password of Wifi
+String HOST = "http://192.168.219.177:80/wetter/insert_data.php"; // IP des Geräts mit der Datenbank im lokalen Netzwerk
 DHT dht(DHTPIN, DHTTYPE);
 
 void setup() {
     Serial.begin(115200);
     delay(1000);
-    pinMode(2, OUTPUT);
+    pinMode(2, OUTPUT); // ONBOARD LED
+    pinMode(CO2PIN, INPUT);
 
     WiFi.mode(WIFI_STA); //Optional
     WiFi.begin(ssid, password);
@@ -29,7 +31,9 @@ void setup() {
     }
 
     digitalWrite(2, LOW);
-    Serial.println("\nConnected to the WiFi network");
+    Serial.print("\nConnected to the WiFi");
+    Serial.print(ssid);
+    Serial.print(" network\n");
     Serial.print("Local ESP32 IP: ");
     Serial.println(WiFi.localIP());
 
@@ -38,29 +42,44 @@ void setup() {
 
 void loop() {
     delay(100);
+    // Temp & Humidity
     float humidity = 0;
     float temperature = 0;
+    float co2 = 0;
     int values = 0;
 
     for (int i = 0; i < 30; i++) {
       float h = dht.readHumidity();
       float t = dht.readTemperature();
+
+      // CO2
+      unsigned long pwmtime = pulseIn(CO2PIN, HIGH, 2000000) / 1000;
+      float pulsepercent = pwmtime / 1004.0;
+      int c = 5000 * pulsepercent; // 5000 = ppm range
       
       if (isnan(h) || isnan(t)) {
-        Serial.println(F("Failed to read from DHT sensor!"));
+        Serial.println("Failed to read from DHT sensor!");
+        continue;
+      }
+
+      if (isnan(c) || c == 0) {
+        Serial.println("Failed to read CO2 data!");
         continue;
       }
 
       humidity += h;
       temperature += t;
+      co2 += c;
+
       values++;
       delay(2000);
     }
 
     humidity /= values;
     temperature /= values;
+    co2 /= values;
 
-    if (humidity == 0 && temperature == 0) {
+    if (humidity == 0 && temperature == 0 && co2 == 0) {
       return;
     }
 
@@ -69,7 +88,9 @@ void loop() {
     Serial.print(humidity);
     Serial.print("%  Temperature: ");
     Serial.print(temperature);
-    Serial.print(" Grad C");
+    Serial.print(" Grad C CO2 Konzentration: ");
+    Serial.print(co2);
+    Serial.print(" ppm");
     Serial.println("");
     Serial.println("-------------------");
 
@@ -83,7 +104,7 @@ void loop() {
     digitalWrite(2, LOW);
 
     HTTPClient http;
-    String queryString = "?temp=" + String(temperature) + "&humidity=" + String(humidity) + "&co2=0";
+    String queryString = "?temp=" + String(temperature) + "&humidity=" + String(humidity) + "&co2=" + String(co2);
     http.begin(HOST + queryString);
     int httpCode = http.GET();
 
