@@ -5,6 +5,9 @@ $user = "root";
 $password = "";
 $database = "wetterstation"; 
 
+// error reporting
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
 // Create database connection
 $db = new mysqli($host, $user, $password, $database);
 
@@ -12,3 +15,4 @@ $db = new mysqli($host, $user, $password, $database);
 if ($db->connect_error) {
     die("Verbindung zur Datenbank fehlgeschlagen: " . $db->connect_error);
 }
+?>
