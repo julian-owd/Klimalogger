@@ -1,13 +1,16 @@
 #include "WiFi.h"
 #include "HTTPClient.h"
 #include "DHT.h"
+#include "LiquidCrystal_I2C.h"
 
 // Board: DOIT ESP32 DEVKIT V1
 // FATAL ERROR OCCURRED? - Wrong boot mode? --> Press boot button for ~2sec while it says "connecting....."
 
-#define DHTPIN 21
+#define DHTPIN 18
 #define CO2PIN 19
 #define DHTTYPE DHT22
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);  
 
 const char* ssid = "JulianHotspot"; // Name of Wifi
 const char* password = "09022004"; // Password of Wifi
@@ -19,6 +22,10 @@ void setup() {
     delay(1000);
     pinMode(2, OUTPUT); // ONBOARD LED
     pinMode(CO2PIN, INPUT);
+
+    lcd.init();
+    // turn on LCD backlight                      
+    lcd.backlight();
 
     WiFi.mode(WIFI_STA); //Optional
     WiFi.begin(ssid, password);
@@ -72,6 +79,14 @@ void loop() {
       co2 += c;
 
       values++;
+
+      lcd.clear();
+
+      lcd.print("temp: "+ String(temperature / values,0)); 
+      lcd.print(" hum: "+String(humidity / values,0)); 
+      lcd.setCursor(0,1);
+      lcd.print("CO2: "+String(co2 / values,0));
+
       delay(2000);
     }
 
@@ -82,7 +97,7 @@ void loop() {
     if (humidity == 0 && temperature == 0 && co2 == 0) {
       return;
     }
-
+    
     Serial.println("-------------------");
     Serial.print("Humidity: ");
     Serial.print(humidity);
@@ -94,12 +109,14 @@ void loop() {
     Serial.println("");
     Serial.println("-------------------");
 
+
     while (WiFi.status() != WL_CONNECTED) {
       WiFi.reconnect();
       Serial.println("Connection to WiFi lost");
       digitalWrite(2, HIGH);
       delay(2000);
     }
+
 
     digitalWrite(2, LOW);
 
@@ -122,4 +139,5 @@ void loop() {
     }
 
     http.end();
+    
 }
