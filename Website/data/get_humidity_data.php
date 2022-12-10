@@ -1,38 +1,45 @@
 <?php
 header('Content-Type: application/json');
 
-include_once "../db_config.php";
+if (isset($_GET['r'])) {
+	
+	$rId = $_GET['r'];
+	include_once "../db_config.php";
+	
+	$statement = $db->prepare("SELECT DATE_FORMAT(`created`,'%Y,%m,%d,%H,%i,%S') AS datum, `humidity` FROM (SELECT * FROM `sensor` ORDER BY `id` DESC LIMIT 50) as tmp WHERE `rId`=? ORDER BY `id` ASC;");
+	$statement->bind_param('i', $rId);
+	$statement->execute();
+	$statement->store_result();
+	$statement->bind_result($date, $humidity);
+	
+	$rows = array();
+	$table = array();
+	
+	$table['cols'] = array( 
+		array('label' => 'Uhrzeit', 'type' => 'datetime'),
+		array('label' => 'Luftfeuchtigkeit', 'type' => 'number')
+	);
+	
+	while ($statement->fetch()) {
+		$sub_array = array();
+		$datetime = explode(",", $date);
+		$sub_array[] = array(
+				"v" => 'Date(' . $datetime[0] . ',' . $datetime[1] - 1 . ',' . $datetime[2] . ',' . $datetime[3] . ',' . $datetime[4] . ',' . $datetime[5] . ',' . ')'
+			);
+		$sub_array[] = array(
+				"v" => $humidity
+			);
+			
+		$rows[] = array(
+				"c" => $sub_array
+			);
+	}
 
-$query = "SELECT DATE_FORMAT(`datum`,'%Y,%m,%d,%H,%i,%S') AS datum, `humidity` FROM (SELECT * FROM `daten` ORDER BY `id` DESC LIMIT 50) AS tmp ORDER BY `id` ASC;";
-$result = $db->query($query);
+	$table['rows'] = $rows;
 
-$rows = array();
-$table = array();
+	$statement->close();
+	$db->close();
 
-$table['cols'] = array( 
-	array('label' => 'Uhrzeit', 'type' => 'datetime'),
-	array('label' => 'Luftfeuchtigkeit', 'type' => 'number')
-);
-
-while ($row = mysqli_fetch_array($result)) {
-	$sub_array = array();
-	$datetime = explode(",", $row["datum"]);
-	$sub_array[] = array(
-			"v" => 'Date(' . $datetime[0] . ',' . $datetime[1] - 1 . ',' . $datetime[2] . ',' . $datetime[3] . ',' . $datetime[4] . ',' . $datetime[5] . ',' . ')'
-		);
-	$sub_array[] = array(
-			"v" => $row["humidity"]
-		);
-		
-	$rows[] = array(
-			"c" => $sub_array
-		);
+	print json_encode($table);
 }
-
-$table['rows'] = $rows;
-
-$result->close();
-$db->close();
-
-print json_encode($table);
 ?>

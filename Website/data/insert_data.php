@@ -1,10 +1,12 @@
 <?php
+// example: http://localhost/wetter/data/insert_data.php?r=1&t=21.2&h=53.2&c=999&accessKey=m2nZGW1S
 // check if all of the parameters are set
-if (isset($_GET["temp"]) && isset($_GET["humidity"]) && isset($_GET["co2"]) && isset($_GET["accessKey"])) {
+if (isset($_GET["r"]) && isset($_GET["t"]) && isset($_GET["h"]) && isset($_GET["c"]) && isset($_GET["accessKey"])) {
     // data
-    $temp = $_GET["temp"];
-    $humidity = $_GET["humidity"];
-    $co2 = $_GET["co2"];
+	$room = $_GET["r"];
+    $temp = $_GET["t"];
+    $humidity = $_GET["h"];
+    $co2 = $_GET["c"];
 	$accessKey = $_GET["accessKey"];
 	
 	// prevent forbidden access
@@ -14,11 +16,11 @@ if (isset($_GET["temp"]) && isset($_GET["humidity"]) && isset($_GET["co2"]) && i
 	}
 	
 	// database connection
-    include_once 'db_config.php';
+    include_once '../db_config.php';
 	
 	// prepare statement (prevents sql injection)
-	$statement = $db->prepare("INSERT INTO `daten` (`temp`, `humidity`, `co2`) VALUES (?, ?, ?)");
-	$statement->bind_param('ddd', $temp, $humidity, $co2);
+	$statement = $db->prepare("INSERT INTO `sensor` (`temperature`, `humidity`, `co2`, `rId`) VALUES (?, ?, ?, ?)");
+	$statement->bind_param('dddd', $temp, $humidity, $co2, $room);
 	
 	// execute statement
 	if ($statement->execute()) {
@@ -29,6 +31,7 @@ if (isset($_GET["temp"]) && isset($_GET["humidity"]) && isset($_GET["co2"]) && i
 	
 	// close statement
 	$statement->close();
+	$db->close();
 } else {
     header("HTTP/1.0 404 Not Found");
 }

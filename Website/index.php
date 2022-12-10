@@ -22,24 +22,89 @@
 		<div class="header">
 			<h1>Klimalogger</h1>
 			<div class="header-right">
-				<a href="export_data.php">Export</a>
+				<select name="selectSection" id="selectSection" onchange="selectRoom()">
+					<?php
+						$rId = 1;
+						if (isset($_GET["r"])) {
+							$rId = $_GET["r"];
+						}
+						include_once 'db_config.php';
+						$sql = "SELECT * FROM `room`;";
+						foreach ($db->query($sql) as $row) {
+							if ($row['id'] == $rId) {
+								echo "<option value=". $row['id'] . " selected=selected>" . $row['label'] . "</option>";
+							} else {
+								echo "<option value=". $row['id'] . ">" . $row['label'] . "</option>";
+							}
+						}
+					?>
+				</select>
+				
+				<script>
+					function selectRoom() {
+						var selectBox = document.getElementById("selectSection");
+						var rId = selectBox.options[selectBox.selectedIndex].value;
+						
+						
+						if (!rId) {
+							window.location.href = ("index.php");
+						} else {
+							window.location.href = ("index.php?r=" + rId);
+						}
+					}
+				</script>
+				
+				<a href="data/export_data.php">Export</a>
 				<a href="http://wp.tls-gi.de/" target="_blank">TLS</a>
 			</div>
 		</div>
 		
-		<div class="current-data">
-			
 		
+			
 <?php
-        include_once 'db_config.php';
-
-        $sql = "SELECT DATE_FORMAT(`datum`,'%d.%m.%Y %H:%i:%S') AS datum, `temp`, `humidity`, `co2` FROM `daten` WHERE `id` = (SELECT MAX(`id`) FROM `daten`);";
-        foreach ($db->query($sql) as $row) {
-            echo "<h2>Aktuelle Temperatur: ".$row['temp']."° C</h2><br /><h2>Aktuelle Luftfeuchtigkeit: " .$row["humidity"] . "%</h2><br /><h2>Aktueller Kohlenstoffdioxidgehalt: ".$row['co2'] . "ppm</h2><h3>Letzte Aktualisierung: " . $row["datum"] . "</h3><br />";
-        }
+		include_once 'db_config.php';
+		
+		$rId = 1;
+		
+		if (isset($_GET["r"])) {
+			$rId = $_GET["r"];
+		}
+		
+		$statement = $db->prepare("SELECT `label` FROM `room` WHERE `id`=?");
+		$statement->bind_param('i', $rId);
+		$statement->execute();
+		$statement->store_result();
+		if ($statement->num_rows == 0) {
+			$rId = 0;
+		}
+			
+		$statement->close();
+					
+		if (empty($rId)) {
+			echo "<div class=error><h1>Der Raum konnte nicht gefunden werden!</h1><br />";
+			echo "<a href=index.php>Zurück</a></div>";
+			exit();
+		}
+		
+		$statement = $db->prepare("SELECT DATE_FORMAT(`created`,'%d.%m.%Y %H:%i:%S') AS datum, `temperature`, `humidity`, `co2` FROM `sensor` WHERE `id`=(SELECT MAX(`id`) FROM `sensor` WHERE `rId`=?);");
+		$statement->bind_param('i', $rId);
+		$statement->execute();
+		$statement->store_result();
+		$statement->bind_result($date, $temperature, $humidity, $co2);
+		
+		if ($statement->num_rows == 0) {
+			echo "<div class=error><h1>Es sind keine Daten für diesen Raum vorhanden!</h1><br />";
+			echo "<a href=index.php>Zurück</a></div>";
+			exit();
+		}
+		
+		if ($statement->fetch()) {
+			echo "<div class=current-data><h2>Aktuelle Temperatur: " . $temperature . "° C</h2><br /><h2>Aktuelle Luftfeuchtigkeit: " . $humidity . "%</h2><br /><h2>Aktueller Kohlenstoffdioxidgehalt: " . $co2 . "ppm</h2><h3>Letzte Aktualisierung: " . $date . "</h3><br /></div>";
+		}
+		
+		$statement->close();
+		$db->close();
 ?>
-
-		</div>
 				
 		<div id="temp_chart" style="width: 100%; height: 500px;"></div>
 		<div id="humidity_chart" style="width: 100%; height: 500px;"></div>
