@@ -12,8 +12,33 @@ body {
 	font-size: 42px;
 }
 
+.header select {
+	float: right;
+	padding: 12px;
+	font-size: 18px;
+	text-align: center;
+	line-height: 25px;
+	border-radius: 4px;
+	width: auto;
+	background-color: #f1f1f1;
+	color: black;
+}
+
+.header select:hover {
+	cursor: pointer;
+}
+
+.header input[type=text] {
+	float: right;
+	padding: 12px;
+	font-size: 18px;
+	line-height: 25px;
+	border: none;
+	width: 15%;
+}
+
 .header a {
-	float: left;
+	float: right;
 	color: black;
 	text-align: center;
 	padding: 12px;
@@ -64,4 +89,32 @@ body {
 
 .current-data h2:nth-of-type(3):hover {
 	background-color: #983b46;
+}
+
+.error {
+	width: 100%;
+	height: 20%;
+	background-color: #ff6969;
+	border: black;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+}
+
+.error h1 {
+	padding: 12px;
+	color: white;
+	text-align: center;
+}
+
+.error a {
+	padding: 12px;
+	text-decoration: none;
+	color: white;
+	font-weight: bold;
+	border-style: dashed;
+	border-radius: 4px;
+	margin: 0;
+
 }

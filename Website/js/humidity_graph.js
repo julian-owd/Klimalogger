@@ -1,10 +1,19 @@
 $(function() {
+	var rId = 1;
+	
+	const queryString = window.location.search;
+	const urlParameters = new URLSearchParams(queryString);
+	
+	if (urlParameters.get('r')) {
+		rId = urlParameters.get('r');
+	}
+	
 	google.charts.load('current', {'packages':['corechart']});
 	google.charts.setOnLoadCallback(drawChart);
 			
 	function drawChart() {
 		var jsonData = $.ajax({
-			url: "data/get_humidity_data.php",
+			url: ("data/get_humidity_data.php?r=" + rId),
 			dataType: "json",
 			async: false
 		}).responseText;
