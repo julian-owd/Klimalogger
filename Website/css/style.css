@@ -1,11 +1,56 @@
-h1 {
-    color: red;
-}
-p {
-    color: green;
+body {
+	font-family: 'Open Sans', sans-serif;
 }
 
-.temp-chart-container, .humidity-chart-container, .co2-chart-container {
-  width: 840px;
-  height: auto;
+.header {
+  overflow: hidden;
+  background-color: #f1f1f1;
+  padding: 10px 10px;
+}
+
+.header h1 {
+	font-size: 42px;
+}
+
+.header a {
+	float: left;
+	color: black;
+	text-align: center;
+	padding: 12px;
+	text-decoration: none;
+	font-size: 18px;
+	line-height: 25px;
+	border-radius: 4px;
+}
+
+.header-right {
+  float: right;
+}
+
+.header a:hover {
+	background-color: #3b7f98;
+	color: white;
+}
+
+.current-data {
+	width: 50%;
+	margin: 0 auto;
+}
+
+.current-data h2 {
+	font-size: 1.8vw;
+	text-align: center;
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+	padding: 12px;
+}
+
+.current-data h3 {
+	text-align: center;
+	font-size: 18px;
+}
+
+.current-data h2:hover {
+	background-color: #3b7f98;
+	color: white;
+	box-shadow: rgba(0, 0, 0, 0.75) 0px 10px 20px;
 }
