@@ -50,7 +50,18 @@ body {
 }
 
 .current-data h2:hover {
-	background-color: #3b7f98;
 	color: white;
 	box-shadow: rgba(0, 0, 0, 0.75) 0px 10px 20px;
+}
+
+.current-data h2:nth-of-type(1):hover {
+	background-color: #3b7f98;
+}
+
+.current-data h2:nth-of-type(2):hover {
+	background-color: #3b9881;
+}
+
+.current-data h2:nth-of-type(3):hover {
+	background-color: #983b46;
 }

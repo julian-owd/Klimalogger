@@ -3,17 +3,20 @@
     <head>
         <title>Klimalogger</title>
 		
+		<link rel="icon" type="image/png" href="img/favicon.png"/>
+		
 		<link rel="stylesheet" href="css/style.css">
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
-		
+				
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		
 		<script type="text/javascript" src="js/temp_graph.js"></script>
 		<script type="text/javascript" src="js/humidity_graph.js"></script>
-		<script type="text/javascript" src="js/co2_graph.js"></script>		
+		<script type="text/javascript" src="js/co2_graph.js"></script>
+		
     </head>
     <body>
 		<div class="header">
