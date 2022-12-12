@@ -26,7 +26,7 @@ void setup() {
     lcd.init();
     // turn on LCD backlight                      
     lcd.backlight();
-/*
+
     WiFi.mode(WIFI_STA); //Optional
     WiFi.begin(ssid, password);
     Serial.print("\nConnecting");
@@ -45,7 +45,7 @@ void setup() {
     Serial.print(" network\n");
     Serial.print("Local ESP32 IP: ");
     Serial.println(WiFi.localIP());
-*/
+
     dht.begin();
 }
 
@@ -127,7 +127,7 @@ void loop() {
     Serial.println("");
     Serial.println("-------------------");
 
-/*
+
     while (WiFi.status() != WL_CONNECTED) {
       WiFi.reconnect();
       Serial.println("Connection to WiFi lost");
@@ -137,8 +137,8 @@ void loop() {
 
 
     digitalWrite(2, LOW);
-*/
-/*
+
+
     HTTPClient http;
     String queryString = "?temp=" + String(temperature) + "&humidity=" + String(humidity) + "&co2=" + String(co2);
     http.begin(HOST + queryString);
@@ -158,5 +158,5 @@ void loop() {
     }
 
     http.end();
-  */
+  
 }
