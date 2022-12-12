@@ -24,10 +24,10 @@ if (isset($_GET['r'])) {
 		$sub_array = array();
 		$datetime = explode(",", $date);
 		$sub_array[] = array(
-				"v" => 'Date(' . $datetime[0] . ',' . $datetime[1] - 1 . ',' . $datetime[2] . ',' . $datetime[3] . ',' . $datetime[4] . ',' . $datetime[5] . ',' . ')'
+				"v" => 'Date(' . $datetime[0] . ',' . ($datetime[1] - 1) . ',' . $datetime[2] . ',' . $datetime[3] . ',' . $datetime[4] . ',' . $datetime[5] . ')'
 			);
 		$sub_array[] = array(
-				"v" => $co2
+				"v" => number_format($co2, 0, '', '')
 			);
 			
 		$rows[] = array(

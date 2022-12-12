@@ -13,6 +13,9 @@ body {
 }
 
 .header select {
+	-webkit-appearance: none;
+ 	-moz-appearance: none;
+  	appearance: none;
 	float: right;
 	padding: 12px;
 	font-size: 18px;

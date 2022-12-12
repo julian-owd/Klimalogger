@@ -106,9 +106,11 @@
 		$db->close();
 ?>
 				
-		<div id="temp_chart" style="width: 100%; height: 500px;"></div>
-		<div id="humidity_chart" style="width: 100%; height: 500px;"></div>
-		<div id="co2_chart" style="width: 100%; height: 500px;"></div>
+		<div class="diagrams">
+			<div id="temp_chart" style="width: 100%; height: 500px;"></div>
+			<div id="humidity_chart" style="width: 100%; height: 500px;"></div>
+			<div id="co2_chart" style="width: 100%; height: 500px;"></div>
+		</div>
 		
     </body>
 </html>
