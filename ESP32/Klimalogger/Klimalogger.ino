@@ -26,7 +26,7 @@ void setup() {
     lcd.init();
     // turn on LCD backlight                      
     lcd.backlight();
-
+/*
     WiFi.mode(WIFI_STA); //Optional
     WiFi.begin(ssid, password);
     Serial.print("\nConnecting");
@@ -34,7 +34,9 @@ void setup() {
 
     while(WiFi.status() != WL_CONNECTED) {
       Serial.print(".");
+      lcd.print("Not connected");
         delay(500);
+        lcd.clear();
     }
 
     digitalWrite(2, LOW);
@@ -43,11 +45,12 @@ void setup() {
     Serial.print(" network\n");
     Serial.print("Local ESP32 IP: ");
     Serial.println(WiFi.localIP());
-
+*/
     dht.begin();
 }
 
 void loop() {
+
     delay(100);
     // Temp & Humidity
     float humidity = 0;
@@ -66,11 +69,25 @@ void loop() {
       
       if (isnan(h) || isnan(t)) {
         Serial.println("Failed to read from DHT sensor!");
+
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Failed to read");
+        lcd.setCursor(0, 1);
+        lcd.print("from DHT sensor!"); 
+               
         continue;
       }
 
       if (isnan(c) || c == 0) {
         Serial.println("Failed to read CO2 data!");
+
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Failed to read");
+        lcd.setCursor(0, 1);
+        lcd.print("CO2 data!"); 
+        
         continue;
       }
 
@@ -82,6 +99,7 @@ void loop() {
 
       lcd.clear();
 
+      lcd.setCursor(0,0);
       lcd.print("temp: "+ String(temperature / values,0)); 
       lcd.print(" hum: "+String(humidity / values,0)); 
       lcd.setCursor(0,1);
@@ -109,7 +127,7 @@ void loop() {
     Serial.println("");
     Serial.println("-------------------");
 
-
+/*
     while (WiFi.status() != WL_CONNECTED) {
       WiFi.reconnect();
       Serial.println("Connection to WiFi lost");
@@ -119,7 +137,8 @@ void loop() {
 
 
     digitalWrite(2, LOW);
-
+*/
+/*
     HTTPClient http;
     String queryString = "?temp=" + String(temperature) + "&humidity=" + String(humidity) + "&co2=" + String(co2);
     http.begin(HOST + queryString);
@@ -139,5 +158,5 @@ void loop() {
     }
 
     http.end();
-    
+  */
 }
