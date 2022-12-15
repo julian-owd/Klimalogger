@@ -3,7 +3,7 @@
 include_once '../db_config.php';
 
  // Fetch records from database 
- $query = $db->query("SELECT label, created, temperature, humidity, co2 FROM `sensor` JOIN room ON room.id = sensor.rId ORDER BY rId ASC, created ASC;");
+ $query = $db->query("SELECT `label`, `created`, `temperature`, `humidity`, `co2` FROM `sensor` JOIN `room` ON room.id = sensor.rId ORDER BY `rId` ASC, `created` ASC;");
   
  if ($query->num_rows > 0) {
      $delimiter = ",";
