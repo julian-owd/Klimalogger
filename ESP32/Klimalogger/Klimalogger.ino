@@ -12,8 +12,8 @@
 
 // WiFi Settings
 struct WiFiSettings {
-  char ssid[50] = "FrettBox";
-  char password[64] = "42327947420018450426";
+  char ssid[50] = "";
+  char password[64] = "";
 };
 
 struct LEDs {
