@@ -3,9 +3,9 @@ body {
 }
 
 .header {
-  overflow: hidden;
-  background-color: #f1f1f1;
-  padding: 10px 10px;
+	overflow: hidden;
+	background-color: #f1f1f1;
+	padding: 10px 10px;
 }
 
 .header h1 {
@@ -52,7 +52,7 @@ body {
 }
 
 .header-right {
-  float: right;
+	float: right;
 }
 
 .header a:hover {
@@ -119,5 +119,4 @@ body {
 	border-style: dashed;
 	border-radius: 4px;
 	margin: 0;
-
 }
